@@ -13,6 +13,31 @@
     <li><label><input type="checkbox" />test 3</label><input type="button" value="delete" /></li>
   </ul>
   <script type="text/javascript">
+    var input = document.querySelector('input[type="text"]');
+    var button = document.querySelector('button');
+    button.addEventListener('click', function() {
+      var ul = document.querySelector('ul');
+
+      var li = document.createElement('li');
+
+      var label = document.createElement('label');
+
+      var checkbox = document.createElement('input');
+      checkbox.setAttribute('type', 'checkbox');
+      var text = document.createTextNode(input.value);
+
+      label.appendChild(checkbox);
+      label.appendChild(text);
+
+      var _delete = document.createElement('input');
+      _delete.setAttribute('type', 'button');
+      _delete.value = 'delete';
+
+      li.appendChild(label);
+      li.appendChild(_delete);
+
+      ul.appendChild(li);
+    });
   </script>
 </body>
 </html>
