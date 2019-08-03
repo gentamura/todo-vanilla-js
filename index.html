@@ -8,23 +8,45 @@
 <body>
   <input type="text" /><button>input</button>
   <ul>
-    <li><label><input type="checkbox" />test 1</label><input type="button" value="delete" /></li>
-    <li><label><input type="checkbox" />test 2</label><input type="button" value="delete" /></li>
-    <li><label><input type="checkbox" />test 3</label><input type="button" value="delete" /></li>
   </ul>
   <script type="text/javascript">
     var input = document.querySelector('input[type="text"]');
     var button = document.querySelector('button');
-    button.addEventListener('click', function() {
-      var ul = document.querySelector('ul');
 
+    var data = localStorage.getItem('data');
+    data = data ? JSON.parse(data) : [];
+
+    var ul = document.querySelector('ul');
+
+    button.addEventListener('click', function() {
+
+      var li = createLi(false, input.value);
+
+      ul.appendChild(li);
+
+      data.push({ checked: false, value: input.value });
+
+      localStorage.setItem('data', JSON.stringify(data));
+
+      input.value = '';
+    });
+
+    data.forEach((obj, i) => {
+      console.log('obj', obj);
+      var li = createLi(obj.checked, obj.value);
+      ul.appendChild(li);
+    });
+
+    function createLi(checked, value) {
       var li = document.createElement('li');
 
       var label = document.createElement('label');
 
       var checkbox = document.createElement('input');
       checkbox.setAttribute('type', 'checkbox');
-      var text = document.createTextNode(input.value);
+      checkbox.checked = checked;
+
+      var text = document.createTextNode(value);
 
       label.appendChild(checkbox);
       label.appendChild(text);
@@ -36,8 +58,8 @@
       li.appendChild(label);
       li.appendChild(_delete);
 
-      ul.appendChild(li);
-    });
+      return li;
+    }
   </script>
 </body>
 </html>
