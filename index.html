@@ -4,6 +4,11 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Todo Vanilla JS</title>
+  <style>
+    .done {
+      text-decoration: line-through;
+    }
+  </style>
 </head>
 <body>
   <input type="text" /><button>input</button>
@@ -45,10 +50,25 @@
       checkbox.setAttribute('type', 'checkbox');
       checkbox.checked = checked;
 
-      var text = document.createTextNode(value);
+      var span = document.createElement('span');
+      span.textContent = value;
+
+      if (checkbox.checked) {
+        span.classList.add('done');
+      } else {
+        span.classList.remove('done');
+      }
 
       label.appendChild(checkbox);
-      label.appendChild(text);
+      label.appendChild(span);
+
+      checkbox.addEventListener('click', function() {
+        if (checkbox.checked) {
+          span.classList.add('done');
+        } else {
+          span.classList.remove('done');
+        }
+      });
 
       var _delete = document.createElement('input');
       _delete.setAttribute('type', 'button');
