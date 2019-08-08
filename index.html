@@ -11,6 +11,7 @@
   </style>
 </head>
 <body>
+  <div>in progress: <span id="inProgressCount"></span>, finished: <span id="finishedCount"></span></div>
   <input type="text" /><button>input</button>
   <ul></ul>
   <script type="text/javascript">
@@ -37,11 +38,30 @@
 
     data.forEach((obj, i) => {
       console.log('obj', obj);
-      var li = createLi(obj.checked, obj.value);
+      var li = createLi(obj.checked, obj.value, i);
       ul.appendChild(li);
     });
 
-    function createLi(checked, value) {
+    updateCount(data);
+
+    function updateCount(data) {
+      var inProgressCount = data.filter(obj => obj.checked === false).length;
+      document.querySelector('#inProgressCount').textContent = inProgressCount;
+
+      var finishedCount = data.filter(obj => obj.checked === true).length;
+      document.querySelector('#finishedCount').textContent = finishedCount;
+    }
+
+    function updateData(data, checked, value, index) {
+      var currentData = data[index];
+      data[index] = { checked: checked, value: value };
+      localStorage.setItem('data', JSON.stringify(data));
+
+      var updatedData = localStorage.getItem('data');
+      return updatedData ? JSON.parse(updatedData) : [];
+    }
+
+    function createLi(checked, value, index) {
       var li = document.createElement('li');
 
       var label = document.createElement('label');
@@ -68,6 +88,8 @@
         } else {
           span.classList.remove('done');
         }
+        var updatedData = updateData(data, checkbox.checked, value, index);
+        updateCount(updatedData);
       });
 
       var _delete = document.createElement('input');
