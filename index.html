@@ -36,13 +36,18 @@
       input.value = '';
     });
 
-    data.forEach((obj, i) => {
-      console.log('obj', obj);
-      var li = createLi(obj.checked, obj.value, i);
-      ul.appendChild(li);
-    });
-
     updateCount(data);
+    setup();
+
+    function setup() {
+      ul.innerHTML = '';
+
+      data.forEach((obj, i) => {
+        console.log('obj', obj);
+        var li = createLi(obj.checked, obj.value, i);
+        ul.appendChild(li);
+      });
+    }
 
     function updateCount(data) {
       var inProgressCount = data.filter(obj => obj.checked === false).length;
@@ -55,6 +60,14 @@
     function updateData(data, checked, value, index) {
       var currentData = data[index];
       data[index] = { checked: checked, value: value };
+      localStorage.setItem('data', JSON.stringify(data));
+
+      var updatedData = localStorage.getItem('data');
+      return updatedData ? JSON.parse(updatedData) : [];
+    }
+
+    function deleteData(data, index) {
+      data.splice(index, 1);
       localStorage.setItem('data', JSON.stringify(data));
 
       var updatedData = localStorage.getItem('data');
@@ -95,6 +108,14 @@
       var _delete = document.createElement('input');
       _delete.setAttribute('type', 'button');
       _delete.value = 'delete';
+      _delete.addEventListener('click', function() {
+        if (!confirm('Are you sure?')) return;
+
+        var updatedData = deleteData(data, index);
+        updateCount(updatedData);
+
+        setup();
+      });
 
       li.appendChild(label);
       li.appendChild(_delete);
