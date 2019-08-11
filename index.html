@@ -24,14 +24,14 @@
     var ul = document.querySelector('ul');
 
     button.addEventListener('click', function() {
-
       var li = createLi(false, input.value);
-
       ul.appendChild(li);
 
       data.push({ checked: false, value: input.value });
-
       localStorage.setItem('data', JSON.stringify(data));
+
+      var updatedData = localStorage.getItem('data');
+      updateCount(JSON.parse(updatedData));
 
       input.value = '';
     });
