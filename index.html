@@ -12,6 +12,7 @@
 </head>
 <body>
   <div>in progress: <span id="inProgressCount"></span>, finished: <span id="finishedCount"></span></div>
+  <div><input type="button" id="toggle" value="hide checked"></div>
   <input type="text" /><button>input</button>
   <ul></ul>
   <script type="text/javascript">
@@ -36,6 +37,20 @@
       input.value = '';
     });
 
+    var isHide = false;
+    var toggle = document.querySelector('#toggle');
+    toggle.addEventListener('click', function() {
+      if (isHide) {
+        isHide = false;
+        toggle.value = 'hide checked';
+      } else {
+        isHide = true;
+        toggle.value = 'show checked';
+      }
+      updateCount(data);
+      setup();
+    });
+
     updateCount(data);
     setup();
 
@@ -43,7 +58,8 @@
       ul.innerHTML = '';
 
       data.forEach((obj, i) => {
-        console.log('obj', obj);
+        if (isHide && obj.checked) return;
+
         var li = createLi(obj.checked, obj.value, i);
         ul.appendChild(li);
       });
